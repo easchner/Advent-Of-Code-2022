@@ -1,8 +1,6 @@
 package day01
 
 import readAndCompoundSpaceDelimited
-import readInputSpaceDelimited
-import readInputString
 
 fun main() {
     fun part1(input: List<Long>): Long {
