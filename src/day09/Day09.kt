@@ -68,7 +68,7 @@ fun main() {
             for (i in 0 until distance) {
                 moveHead(headPosition, direction)
                 moveKnot(headPosition, tailPosition)
-                positions.add(Position(tailPosition.x, tailPosition.y))
+                positions.add(tailPosition.copy())
             }
         }
 
@@ -91,7 +91,7 @@ fun main() {
                     if (!moved)
                         break
                 }
-                positions.add(Position(knots.last().x, knots.last().y))
+                positions.add(knots.last().copy())
             }
         }
 
