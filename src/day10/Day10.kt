@@ -22,8 +22,7 @@ fun main() {
             }
         }
 
-        val sum = 20 * cycles[20] + 60 * cycles[60] + 100 * cycles[100] + 140 * cycles[140] + 180 * cycles[180] + 220 * cycles[220]
-        return sum
+        return listOf(20, 60, 100, 140, 180, 220).map { it * cycles[it] }.sum()
     }
 
     fun part2(input: List<String>): Int {
