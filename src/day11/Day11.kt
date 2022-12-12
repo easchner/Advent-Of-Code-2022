@@ -1,7 +1,6 @@
 package day11
 
 import readInputSpaceDelimited
-import java.math.BigInteger
 
 class Monkey {
     var items = mutableListOf<Long>()
