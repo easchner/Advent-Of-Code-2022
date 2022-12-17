@@ -15,9 +15,6 @@ fun main() {
         val jets = input[0]
         val chamber = mutableListOf<Array<Boolean>>()
         chamber.add(Array(7) { true })
-        chamber.add(Array(7) { false })
-        chamber.add(Array(7) { false })
-        chamber.add(Array(7) { false })
 
         var totalMoves = 0
 
@@ -93,9 +90,6 @@ fun main() {
         val jets = input[0]
         val chamber = mutableListOf<Array<Boolean>>()
         chamber.add(Array(7) { true })
-        chamber.add(Array(7) { false })
-        chamber.add(Array(7) { false })
-        chamber.add(Array(7) { false })
         val maxPeriod = jets.length * rocks.size
 
         var totalMoves = 0L
