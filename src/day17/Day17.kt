@@ -3,26 +3,6 @@ package day17
 import readInputString
 import kotlin.system.measureNanoTime
 
-/*
-####
-
-.#.
-###
-.#.
-
-..#
-..#
-###
-
-#
-#
-#
-#
-
-##
-##
- */
-
 fun main() {
     val rocks = mutableListOf<Array<Pair<Int, Int>>>()
     rocks.add(arrayOf(Pair(0, 0), Pair(0, 1), Pair(0, 2), Pair(0, 3)))
@@ -116,21 +96,14 @@ fun main() {
         chamber.add(Array(7) { false })
         chamber.add(Array(7) { false })
         chamber.add(Array(7) { false })
+        val maxPeriod = jets.length * rocks.size
 
         var totalMoves = 0L
 
-        val table = hashMapOf<Long, Long>()
-        for (t in 0L until 100_000) {
-            val lastLoop = table[(totalMoves % jets.length) * 100_000L + t % rocks.size]
-            if (lastLoop != null && chamber.indexOfLast { it.contains(true) }.toLong() % lastLoop == 0L) {
-                println("After $t rocks we have done $totalMoves (index is ${totalMoves % jets.length}) moves for a height of ${chamber.indexOfLast { it.contains(true) }}")
-            }
-//            if (t % 1740 == 1180L) {
-//                println("After $t rocks (on rock ${t % rocks.size}) we have done $totalMoves (index is ${totalMoves % jets.length}) moves for a height of ${chamber.indexOfLast { it.contains(true) }}")
-//            }
-            table[(totalMoves % jets.length) * 100_000L + t % rocks.size] = chamber.indexOfLast { it.contains(true) }.toLong()
+        val table = Array(maxPeriod * 2 + 1) { 0 }
+        for (t in 0 until maxPeriod * 2 + 1) {
             // Add rock
-            val rock = rocks[(t % rocks.size).toInt()]
+            val rock = rocks[(t % rocks.size)]
             var height = chamber.indexOfLast { it.contains(true) } + rock.maxOf { it.first } + 4
             // Expand chamber if needed
             while (chamber.size < height + 1) {
@@ -192,18 +165,43 @@ fun main() {
             for (p in rock) {
                 chamber[height - p.first][p.second + left] = true
             }
+            table[t] = chamber.indexOfLast { it.contains(true) }
         }
-        return chamber.indexOfLast { it.contains(true) }.toLong()
+
+        // Find the period
+        var smallestPeriod = -1
+        for (i in 1..maxPeriod) {
+            var possiblePeriod = true
+            var offset = 0
+            val difference = table[i]
+            while (possiblePeriod && offset < maxPeriod) {
+                val a = table[i * 2 + offset]
+                val b = table[i + offset]
+                if (a - b != difference) {
+                    possiblePeriod = false
+                }
+                offset++
+            }
+            if (possiblePeriod) {
+                smallestPeriod = i
+                break
+            }
+        }
+
+        val periodOffset = 1_000_000_000_000L % smallestPeriod
+        val numPeriods = 1_000_000_000_000L / smallestPeriod - 1
+        return table[smallestPeriod + periodOffset.toInt() - 1].toLong() + numPeriods * table[smallestPeriod]
     }
 
     val testInput = readInputString("day17/test")
     val input = readInputString("day17/input")
 
-    check(part1(testInput) == 3_068)
+//    check(part1(testInput) == 3_068)
     val time1 = measureNanoTime { println(part1(input)) }
     println("Time for part 1 was ${"%,d".format(time1)} ns")
 
-//    check(part2(testInput) == 0)
+//    println(part2(testInput))
+//    check(part2(testInput) == 1_514_285_714_288L)
     val time2 = measureNanoTime { println(part2(input)) }
     println("Time for part 2 was ${"%,d".format(time2)} ns")
 }
